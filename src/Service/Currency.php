@@ -9,7 +9,7 @@
  * @author      Nails Dev Team
  */
 
-namespace Nails\Currency\Library;
+namespace Nails\Currency\Service;
 
 use Nails\Factory;
 use Nails\Currency\Exception\CurrencyException;
