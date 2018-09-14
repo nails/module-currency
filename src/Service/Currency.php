@@ -37,8 +37,8 @@ class Currency {
      */
     public function __construct()
     {
-        $this->aSupportedCurrencies = Factory::property('SupportedCurrencies', 'nailsapp/module-currency');
-        $aEnabled                   = Factory::property('EnabledCurrencies', 'nailsapp/module-currency');
+        $this->aSupportedCurrencies = Factory::property('SupportedCurrencies', 'nails/module-currency');
+        $aEnabled                   = Factory::property('EnabledCurrencies', 'nails/module-currency');
 
         foreach ($aEnabled as $sCode) {
             $this->aEnabledCurrencies[] = $this->getByIsoCode($sCode);

@@ -1,5 +1,5 @@
 {
-    "name": "nailsapp/module-currency",
+    "name": "nails/module-currency",
     "keywords": ["Nails", "Shed Collective", "CodeIgniter", "Currency Module"],
     "homepage": "http://nailsapp.co.uk/modules/currency",
     "description": "This is the \"Currency\" module for Nails; it brings support for currency and currency conversion.",
