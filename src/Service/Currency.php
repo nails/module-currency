@@ -33,6 +33,15 @@ class Currency
     // --------------------------------------------------------------------------
 
     /**
+     * All currencies supported by this system as a flat array
+     *
+     * @var string[]
+     */
+    protected $aSupportedCurrenciesFlat = [];
+
+    // --------------------------------------------------------------------------
+
+    /**
      * All currencies supported by this system
      *
      * @var Resource\Currency[]
@@ -48,13 +57,13 @@ class Currency
     {
         $aSupported = Factory::property('SupportedCurrencies', 'nails/module-currency');
         foreach ($aSupported as $oCurrency) {
-            $this->aSupportedCurrencies[] = new Resource\Currency($oCurrency);
+            $this->aSupportedCurrencies[$oCurrency->code]     = new Resource\Currency($oCurrency);
+            $this->aSupportedCurrenciesFlat[$oCurrency->code] = $oCurrency->code . ' (' . $oCurrency->label . ')';
         }
-        dd($this->aSupportedCurrencies);
-        $aEnabled = appSetting('aEnabledCurrencies', 'nails/module-currency') ?? [];
 
+        $aEnabled = appSetting('aEnabledCurrencies', 'nails/module-currency') ?? [];
         foreach ($aEnabled as $sCode) {
-            $this->aEnabledCurrencies[] = $this->getByIsoCode($sCode);
+            $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
         }
     }
 
@@ -68,6 +77,18 @@ class Currency
     public function getAll(): array
     {
         return $this->aSupportedCurrencies;
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Returns suppoted currencies as a flat array
+     *
+     * @return string[]
+     */
+    public function getAllFlat(): array
+    {
+        return $this->aSupportedCurrenciesFlat;
     }
 
     // --------------------------------------------------------------------------
@@ -99,6 +120,52 @@ class Currency
         }
 
         throw new CurrencyException('"' . $sCode . '" is not a valid currency code.');
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Determines whether a currency is a supported currency
+     *
+     * @param string|Resource\Currency $mCurrency The currency code or a currency resource
+     *
+     * @return bool
+     * @throws CurrencyException
+     */
+    public function isSupported($mCurrency): bool
+    {
+        if ($mCurrency instanceof Resource\Currency) {
+            return array_key_exists($mCurrency->code, $this->aSupportedCurrencies);
+        } elseif (is_string($mCurrency)) {
+            return array_key_exists($mCurrency, $this->aSupportedCurrencies);
+        }
+
+        throw new CurrencyException(
+            'Argument must be an instant of ' . Resource\Currency::class . ' or a string'
+        );
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Determines whether a currency is an enabled currency
+     *
+     * @param string|Resource\Currency $mCurrency The currency code or a currency resource
+     *
+     * @return bool
+     * @throws CurrencyException
+     */
+    public function isEnabled($mCurrency): bool
+    {
+        if ($mCurrency instanceof Resource\Currency) {
+            return array_key_exists($mCurrency->code, $this->aEnabledCurrencies);
+        } elseif (is_string($mCurrency)) {
+            return array_key_exists($mCurrency, $this->aEnabledCurrencies);
+        }
+
+        throw new CurrencyException(
+            'Argument must be an instant of ' . Resource\Currency::class . ' or a string'
+        );
     }
 
     // --------------------------------------------------------------------------
