@@ -1,11 +1,15 @@
 {
     "name": "nails/module-currency",
-    "keywords": ["Nails", "Shed Collective", "CodeIgniter", "Currency Module"],
+    "keywords": [
+        "Nails",
+        "Shed Collective",
+        "CodeIgniter",
+        "Currency Module"
+    ],
     "homepage": "http://nailsapp.co.uk/modules/currency",
     "description": "This is the \"Currency\" module for Nails; it brings support for currency and currency conversion.",
     "license": "MIT",
-    "authors":
-    [
+    "authors": [
         {
             "name": "Pablo de la Pena",
             "email": "p@nailsapp.co.uk",
@@ -13,26 +17,32 @@
             "role": "Developer"
         }
     ],
-    "support":
-    {
+    "support": {
         "email": "hello@nailsapp.co.uk"
     },
     "require": {},
-    "require-dev":
-    {
+    "require-dev": {
         "phpunit/phpunit": "8.*"
     },
-    "extra":
-    {
-        "nails" :
-        {
+    "extra": {
+        "nails": {
             "moduleName": "currency",
             "type": "module",
-            "namespace": "Nails\\Currency\\"
+            "namespace": "Nails\\Currency\\",
+            "data": {
+                "settings": [
+                    {
+                        "key": "aEnabledCurrencies",
+                        "label": "Enabled Currencies",
+                        "info": "Which currencies should be enabled for use"
+                    }
+                ]
+            }
         }
     },
-    "autoload":
-    {
-        "psr-4": {"Nails\\Currency\\": "src/"}
+    "autoload": {
+        "psr-4": {
+            "Nails\\Currency\\": "src/"
+        }
     }
 }

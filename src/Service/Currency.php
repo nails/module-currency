@@ -51,7 +51,7 @@ class Currency
             $this->aSupportedCurrencies[] = new Resource\Currency($oCurrency);
         }
         dd($this->aSupportedCurrencies);
-        $aEnabled = appSetting('enabled_currencies', 'nails/module-currency') ?? [];
+        $aEnabled = appSetting('aEnabledCurrencies', 'nails/module-currency') ?? [];
 
         foreach ($aEnabled as $sCode) {
             $this->aEnabledCurrencies[] = $this->getByIsoCode($sCode);
