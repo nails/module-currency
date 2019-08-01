@@ -1489,7 +1489,6 @@ return [
                 'thousands_separator' => ',',
             ],
         ],
-        'EnabledCurrencies'   => ['GBP', 'USD', 'EUR'],
     ],
     'services'   => [
         'Currency' => function () {
