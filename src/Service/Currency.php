@@ -11,10 +11,10 @@
 
 namespace Nails\Currency\Service;
 
-use Nails\Factory;
+use Nails\Currency\Constants;
 use Nails\Currency\Exception\CurrencyException;
 use Nails\Currency\Resource;
-use phpDocumentor\Reflection\Types\Boolean;
+use Nails\Factory;
 
 /**
  * Class Currency
@@ -55,13 +55,13 @@ class Currency
      */
     public function __construct()
     {
-        $aSupported = Factory::property('SupportedCurrencies', 'nails/module-currency');
+        $aSupported = Factory::property('SupportedCurrencies', Constants::MODULE_SLUG);
         foreach ($aSupported as $oCurrency) {
             $this->aSupportedCurrencies[$oCurrency->code]     = new Resource\Currency($oCurrency);
             $this->aSupportedCurrenciesFlat[$oCurrency->code] = $oCurrency->code . ' (' . $oCurrency->label . ')';
         }
 
-        $aEnabled = appSetting('aEnabledCurrencies', 'nails/module-currency') ?? [];
+        $aEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG) ?? [];
         foreach ($aEnabled as $sCode) {
             $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
         }

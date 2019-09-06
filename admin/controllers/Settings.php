@@ -12,17 +12,17 @@
 
 namespace Nails\Admin\Currency;
 
+use Nails\Admin\Helper;
 use Nails\Auth\Service\Session;
-use Nails\Common\Exception\ValidationException;
+use Nails\Common\Exception\NailsException;
 use Nails\Common\Service\AppSetting;
 use Nails\Common\Service\Database;
 use Nails\Common\Service\FormValidation;
 use Nails\Common\Service\Input;
+use Nails\Currency\Constants;
 use Nails\Currency\Service\Currency;
 use Nails\Factory;
-use Nails\Admin\Helper;
 use Nails\Invoice\Controller\BaseAdmin;
-use Nails\Common\Exception\NailsException;
 
 /**
  * Class Settings
@@ -85,7 +85,7 @@ class Settings extends BaseAdmin
         /** @var AppSetting $oAppSettingService */
         $oAppSettingService = Factory::service('AppSetting');
         /** @var Currency $oCurrency */
-        $oCurrency = Factory::service('Currency', 'nails/module-currency');
+        $oCurrency = Factory::service('Currency', Constants::MODULE_SLUG);
 
         if ($oInput->post()) {
 
@@ -103,7 +103,7 @@ class Settings extends BaseAdmin
                     'aEnabledCurrencies' => array_filter((array) $oInput->post('aEnabledCurrencies')),
                 ];
 
-                if (!$oAppSettingService->set($aSettings, 'nails/module-currency')) {
+                if (!$oAppSettingService->set($aSettings, Constants::MODULE_SLUG)) {
                     throw new NailsException($oAppSettingService->lastError(), 1);
                 }
 
@@ -121,7 +121,7 @@ class Settings extends BaseAdmin
 
         //  Get data
         $this->data['aSupported'] = $oCurrency->getAllFlat();
-        $this->data['aSettings']  = appSetting(null, 'nails/module-currency', true);
+        $this->data['aSettings']  = appSetting(null, Constants::MODULE_SLUG, true);
 
         Helper::loadView('index');
     }
