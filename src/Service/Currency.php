@@ -186,6 +186,10 @@ class Currency
             $oCurrency = $mCurrency;
         } elseif (is_string($mCurrency)) {
             $oCurrency = $this->getByIsoCode($mCurrency);
+        } else {
+            throw new CurrencyException(
+                'Invalid data type (' . gettype($mCurrency) . ') passed to ' . __METHOD__
+            );
         }
 
         $sOut = number_format(
