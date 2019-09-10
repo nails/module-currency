@@ -173,17 +173,22 @@ class Currency
     /**
      * Formats a currency
      *
-     * @param string $sCode          The currency to get
-     * @param number $nValue         The value
-     * @param bool   $bIncludeSymbol Include the currency symbol
+     * @param string|Resource\Currency $mCurrency      The currency code or a currency resource
+     * @param number                   $nValue         The value
+     * @param bool                     $bIncludeSymbol Include the currency symbol
      *
      * @return string
      * @throws CurrencyException
      */
-    public function format(string $sCode, $nValue, bool $bIncludeSymbol = true)
+    public function format($mCurrency, $nValue, bool $bIncludeSymbol = true)
     {
-        $oCurrency = $this->getByIsoCode($sCode);
-        $sOut      = number_format(
+        if ($mCurrency instanceof Resource\Currency) {
+            $oCurrency = $mCurrency;
+        } elseif (is_string($mCurrency)) {
+            $oCurrency = $this->getByIsoCode($mCurrency);
+        }
+
+        $sOut = number_format(
             $nValue,
             $oCurrency->decimal_precision,
             $oCurrency->decimal_symbol,
