@@ -13,6 +13,7 @@
 namespace Nails\Admin\Currency;
 
 use Nails\Admin\Helper;
+use Nails\Auth;
 use Nails\Auth\Service\Session;
 use Nails\Common\Exception\NailsException;
 use Nails\Common\Service\AppSetting;
@@ -108,7 +109,7 @@ class Settings extends BaseAdmin
                 }
 
                 /** @var Session $oSession */
-                $oSession = Factory::service('Session', 'nails/module-auth');
+                $oSession = Factory::service('Session', Auth\Constants::MODULE_SLUG);
                 $oSession->setFlashData('success', 'Currency settings were saved.');
                 redirect('admin/currency/settings');
 
