@@ -12,6 +12,7 @@
 
 namespace Nails\Admin\Currency;
 
+use Nails\Admin\Controller\Base;
 use Nails\Admin\Helper;
 use Nails\Auth;
 use Nails\Auth\Service\Session;
@@ -23,14 +24,13 @@ use Nails\Common\Service\Input;
 use Nails\Currency\Constants;
 use Nails\Currency\Service\Currency;
 use Nails\Factory;
-use Nails\Invoice\Controller\BaseAdmin;
 
 /**
  * Class Settings
  *
  * @package Nails\Admin\Currency
  */
-class Settings extends BaseAdmin
+class Settings extends Base
 {
     /**
      * Announces this controller's navGroups
