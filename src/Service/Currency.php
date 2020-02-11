@@ -182,6 +182,8 @@ class Currency
      */
     public function format($mCurrency, $nValue, bool $bIncludeSymbol = true)
     {
+        //  @todo (Pablo - 2020-02-11) - Force $nValue to be an integer and format it according to the currency
+
         if ($mCurrency instanceof Resource\Currency) {
             $oCurrency = $mCurrency;
         } elseif (is_string($mCurrency)) {
