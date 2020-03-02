@@ -14,7 +14,6 @@ namespace Nails\Admin\Currency;
 
 use Nails\Admin\Controller\Base;
 use Nails\Admin\Helper;
-use Nails\Auth;
 use Nails\Common\Exception\NailsException;
 use Nails\Common\Service\AppSetting;
 use Nails\Common\Service\Database;
