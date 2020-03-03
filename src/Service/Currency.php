@@ -61,8 +61,7 @@ class Currency
             $this->aSupportedCurrenciesFlat[$oCurrency->code] = $oCurrency->code . ' (' . $oCurrency->label . ')';
         }
 
-        $oEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG);
-        $aEnabled = $oEnabled ? ($oEnabled->getValue() ?? []) : [];
+        $aEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG, []);
         foreach ($aEnabled as $sCode) {
             $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
         }

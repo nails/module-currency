@@ -121,7 +121,7 @@ class Settings extends Base
 
         //  Get data
         $this->data['aSupported'] = $oCurrency->getAllFlat();
-        $this->data['aSettings']  = appSetting(null, Constants::MODULE_SLUG, true);
+        $this->data['aSettings']  = appSetting(null, Constants::MODULE_SLUG, null, true);
 
         Helper::loadView('index');
     }
