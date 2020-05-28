@@ -11,10 +11,10 @@
 
 namespace Nails\Currency\Service;
 
+use Nails\Common\Exception\FactoryException;
 use Nails\Currency\Constants;
 use Nails\Currency\Exception\CurrencyException;
 use Nails\Currency\Resource;
-use Nails\Factory;
 
 /**
  * Class Currency
@@ -52,10 +52,13 @@ class Currency
 
     /**
      * Currency constructor.
+     *
+     * @throws CurrencyException
+     * @throws FactoryException
      */
     public function __construct()
     {
-        $aSupported = Factory::property('SupportedCurrencies', Constants::MODULE_SLUG);
+        $aSupported = $this->getSupported();
         foreach ($aSupported as $oCurrency) {
             $this->aSupportedCurrencies[$oCurrency->code]     = new Resource\Currency($oCurrency);
             $this->aSupportedCurrenciesFlat[$oCurrency->code] = $oCurrency->code . ' (' . $oCurrency->label . ')';
@@ -65,6 +68,20 @@ class Currency
         foreach ($aEnabled as $sCode) {
             $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
         }
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Returns the supported currencies
+     *
+     * @return array
+     */
+    public function getSupported(): array
+    {
+        return (array) json_decode(
+            file_get_contents(NAILS_PATH . Constants::MODULE_SLUG . 'resources/currencies.json')
+        );
     }
 
     // --------------------------------------------------------------------------
