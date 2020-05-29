@@ -80,7 +80,7 @@ class Currency
     public function getSupported(): array
     {
         return (array) json_decode(
-            file_get_contents(NAILS_PATH . Constants::MODULE_SLUG . 'resources/currencies.json')
+            file_get_contents(NAILS_PATH . 'module-currency/resources/currencies.json')
         );
     }
 
