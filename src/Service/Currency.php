@@ -201,7 +201,7 @@ class Currency
     {
         //  @todo (Pablo - 2020-02-11) - Force $nValue to be an integer and format it according to the currency
 
-        $oCurrency = $this->getCurrency($mCurrency, __METHOD__);
+        $oCurrency = $this->inferCurrency($mCurrency, __METHOD__);
         $sOut      = number_format(
             $nValue,
             $oCurrency->decimal_precision,
@@ -223,34 +223,6 @@ class Currency
     // --------------------------------------------------------------------------
 
     /**
-     * Exchanges a value from one currency to another
-     *
-     * @param number                   $nValue        The value to exchange
-     * @param Resource\Currency|string $mCurrencyFrom The currency to exchange from
-     * @param Resource\Currency|string $mCurrencyTo   The currency to exchange to
-     *
-     * @throws CurrencyException
-     */
-    public function exchange($nValue, $mCurrencyFrom, $mCurrencyTo)
-    {
-        $oCurrencyFrom = $this->getCurrency($mCurrencyFrom, __METHOD__);
-        $oCurrencyTo   = $this->getCurrency($mCurrencyTo, __METHOD__);
-        $fRate         = $this->getExchangeRate($oCurrencyFrom, $oCurrencyTo);
-
-        dd($nValue, $oCurrencyFrom, $oCurrencyTo, $fRate    );
-    }
-
-    // --------------------------------------------------------------------------
-
-    public function getExchangeRate($mCurrencyFrom, $mCurrencyTo): float
-    {
-        $oCurrencyFrom = $this->getCurrency($mCurrencyFrom, __METHOD__);
-        $oCurrencyTo   = $this->getCurrency($mCurrencyTo, __METHOD__);
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
      * Infers the currency from the passed value
      *
      * @param Resource\Currency|string $mCurrency The currency
@@ -259,7 +231,7 @@ class Currency
      * @return Resource\Currency
      * @throws CurrencyException
      */
-    protected function getCurrency($mCurrency, string $sMethod): Resource\Currency
+    public function inferCurrency($mCurrency, string $sMethod): Resource\Currency
     {
         if ($mCurrency instanceof Resource\Currency) {
             return $mCurrency;
