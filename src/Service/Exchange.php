@@ -132,6 +132,7 @@ class Exchange
 
         $LOG('Saving matrix data to app settings');
         setAppSetting('currency_matrix', Constants::MODULE_SLUG, $oMatrix);
+        setAppSetting('currency_matrix_updated', Constants::MODULE_SLUG, Factory::factory('DateTime')->format('Y-m-d H:i:s'));
 
         $LOG('Refreshing app settings');
         appSetting('currency_matrix', Constants::MODULE_SLUG, null, true);
