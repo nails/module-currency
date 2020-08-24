@@ -29,21 +29,41 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Exchange
 {
+    /** @var string */
+    const SETTING_MATRIX = 'currency_matrix';
+
+    /** @var string */
+    const SETTING_MATRIX_UPDATED = 'currency_matrix_updated';
+
+    // --------------------------------------------------------------------------
+
     /** @var Currency */
     protected $oCurrency;
+
+    /** @var ExchangeMatrix */
+    protected $oMatrix;
 
     // --------------------------------------------------------------------------
 
     /**
      * Exchange constructor.
      *
-     * @param Currency|null $oCurrencyService The currency service to use
+     * @param Currency|null       $oCurrencyService The currency service to use
+     * @param ExchangeMatrix|null $oExchangeMatrix  The exchange matrix to use
      *
      * @throws FactoryException
      */
-    public function __construct(Currency $oCurrencyService = null)
-    {
+    public function __construct(
+        Currency $oCurrencyService = null,
+        ExchangeMatrix $oExchangeMatrix = null
+    ) {
         $this->oCurrency = $oCurrencyService ?? Factory::service('Currency', Constants::MODULE_SLUG);
+        $this->oMatrix   = $oExchangeMatrix ?? Factory::factory(
+                'ExchangeMatrix',
+                Constants::MODULE_SLUG,
+                $this->oCurrency->getAllEnabled(),
+                appSetting(static::SETTING_MATRIX, Constants::MODULE_SLUG)
+            );
     }
 
     // --------------------------------------------------------------------------
@@ -146,12 +166,14 @@ class Exchange
             }
         }
 
+        $this->oMatrix = $oMatrix;
+
         $LOG('Saving matrix data to app settings');
-        setAppSetting('currency_matrix', Constants::MODULE_SLUG, $oMatrix);
-        setAppSetting('currency_matrix_updated', Constants::MODULE_SLUG, Factory::factory('DateTime')->format('Y-m-d H:i:s'));
+        setAppSetting(static::SETTING_MATRIX, Constants::MODULE_SLUG, $oMatrix);
+        setAppSetting(static::SETTING_MATRIX_UPDATED, Constants::MODULE_SLUG, Factory::factory('DateTime')->format('Y-m-d H:i:s'));
 
         $LOG('Refreshing app settings');
-        appSetting('currency_matrix', Constants::MODULE_SLUG, null, true);
+        appSetting(static::SETTING_MATRIX, Constants::MODULE_SLUG, null, true);
 
         /** @var Event $oEventService */
         $oEventService = Factory::service('Event');

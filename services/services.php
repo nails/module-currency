@@ -1,5 +1,6 @@
 <?php
 
+use Nails\Currency\Factory;
 use Nails\Currency\Service;
 
 return [
@@ -11,11 +12,14 @@ return [
                 return new Service\Currency();
             }
         },
-        'Exchange'       => function (Service\Currency $oCurrencyService = null): Service\Exchange {
+        'Exchange'       => function (
+            Service\Currency $oCurrencyService = null,
+            Factory\ExchangeMatrix $oMatrix = null
+        ): Service\Exchange {
             if (class_exists('\App\Currency\Service\Exchange')) {
-                return new \App\Currency\Service\Exchange($oCurrencyService);
+                return new \App\Currency\Service\Exchange($oCurrencyService, $oMatrix);
             } else {
-                return new Service\Exchange($oCurrencyService);
+                return new Service\Exchange($oCurrencyService, $oMatrix);
             }
         },
         'CurrencyDriver' => function () {
