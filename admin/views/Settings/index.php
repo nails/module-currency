@@ -18,8 +18,17 @@ $oInput = \Nails\Factory::service('Input');
                     'options' => $aSupported,
                     'default' => getFromArray('aEnabledCurrencies', $aSettings, []),
                     'class'   => 'select2',
-                    'info'    => 'These currencies will be used by default wherver currencies are used',
+                    'info'    => 'These currencies will be used by default wherever currencies are used',
                 ]);
+            },
+        ] : null,
+        userHasPermission('admin:currency:settings:driver') ? [
+            'label'   => 'Currency Driver',
+            'content' => function () use ($aSupported, $aSettings) {
+                echo Nails\Admin\Helper::loadSettingsDriverTable(
+                    'CurrencyDriver',
+                    \Nails\Currency\Constants::MODULE_SLUG
+                );
             },
         ] : null,
     ]));
