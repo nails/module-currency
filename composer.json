@@ -20,6 +20,8 @@
     "support": {
         "email": "hello@nailsapp.co.uk"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "nails/module-console": "dev-develop",
         "nails/module-cron": "dev-develop"
