@@ -14,7 +14,10 @@ namespace Nails\Currency\Service;
 use Nails\Common\Exception\FactoryException;
 use Nails\Currency\Constants;
 use Nails\Currency\Exception\CurrencyException;
+use Nails\Currency\Exception\ExchangeException\DriverNotDefinedException;
+use Nails\Currency\Factory\ExchangeMatrix;
 use Nails\Factory;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Exchange
@@ -62,9 +65,101 @@ class Exchange
 
     // --------------------------------------------------------------------------
 
+    /**
+     * Returns the exchange rate for a given currency pair
+     *
+     * @param Resource\Currency|string $mCurrencyFrom The currency to exchange from
+     * @param Resource\Currency|string $mCurrencyTo   The currency to exchange to
+     *
+     * @return float
+     * @throws CurrencyException
+     */
     public function getRate($mCurrencyFrom, $mCurrencyTo): float
     {
         $oCurrencyFrom = $this->oCurrency->inferCurrency($mCurrencyFrom, __METHOD__);
         $oCurrencyTo   = $this->oCurrency->inferCurrency($mCurrencyTo, __METHOD__);
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Updates the currency matrix
+     *
+     * @param OutputInterface|null $oOutput
+     *
+     * @return $this
+     * @throws DriverNotDefinedException
+     * @throws FactoryException
+     */
+    public function updateMatrix(OutputInterface $oOutput = null): self
+    {
+        $LOG = function (string $sMessage) use ($oOutput) {
+            if ($oOutput) {
+                $oOutput->writeln($sMessage);
+            }
+        };
+
+        $oDriver     = $this->getDriver();
+        $aCurrencies = $this->oCurrency->getAllEnabled();
+
+        /** @var ExchangeMatrix $oMatrix */
+        $oMatrix = Factory::factory('ExchangeMatrix', Constants::MODULE_SLUG, $aCurrencies);
+
+        foreach ($oMatrix->getMatrix() as $sFrom => $aTo) {
+
+            $oFrom = $this->oCurrency->getByIsoCode($sFrom);
+
+            foreach ($aTo as $sTo => $fRate) {
+
+                $oTo = $this->oCurrency->getByIsoCode($sTo);
+
+                if ($oFrom === $oTo) {
+                    $fRate = 1;
+                } else {
+                    $fRate = $oDriver->getRate($oFrom, $oTo);
+                }
+
+                $LOG(sprintf(
+                    'Setting rate %s -> %s to %s',
+                    $sFrom,
+                    $sTo,
+                    $fRate
+                ));
+
+                $oMatrix->setRate($oFrom, $oTo, $fRate);
+            }
+        }
+
+        $LOG('Saving matrix data to app settings');
+        setAppSetting('currency_matrix', Constants::MODULE_SLUG, $oMatrix);
+
+        $LOG('Refreshing app settings');
+        appSetting('currency_matrix', Constants::MODULE_SLUG, null, true);
+
+        return $this;
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Returns the enabled currency driver
+     *
+     * @return \Nails\Currency\Interfaces\Driver
+     * @throws DriverNotDefinedException
+     * @throws FactoryException
+     */
+    protected function getDriver(): \Nails\Currency\Interfaces\Driver
+    {
+        /** @var Driver $oDriverService */
+        $oDriverService = Factory::service('CurrencyDriver', Constants::MODULE_SLUG);
+        $oDriver        = $oDriverService->getEnabled();
+
+        if (empty($oDriver)) {
+            throw new DriverNotDefinedException(
+                'No currency driver has been defined.'
+            );
+        }
+
+        return $oDriverService->getInstance($oDriver);
     }
 }

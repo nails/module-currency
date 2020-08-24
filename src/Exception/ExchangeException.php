@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Currency Exception
+ * Exchange Exception
  *
  * @package     Nails
  * @subpackage  module-currency
@@ -11,8 +11,6 @@
 
 namespace Nails\Currency\Exception;
 
-use Nails\Common\Exception\NailsException;
-
-class CurrencyException extends NailsException
+class ExchangeException extends CurrencyException
 {
 }
