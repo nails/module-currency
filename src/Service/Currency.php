@@ -201,17 +201,8 @@ class Currency
     {
         //  @todo (Pablo - 2020-02-11) - Force $nValue to be an integer and format it according to the currency
 
-        if ($mCurrency instanceof Resource\Currency) {
-            $oCurrency = $mCurrency;
-        } elseif (is_string($mCurrency)) {
-            $oCurrency = $this->getByIsoCode($mCurrency);
-        } else {
-            throw new CurrencyException(
-                'Invalid data type (' . gettype($mCurrency) . ') passed to ' . __METHOD__
-            );
-        }
-
-        $sOut = number_format(
+        $oCurrency = $this->inferCurrency($mCurrency, __METHOD__);
+        $sOut      = number_format(
             $nValue,
             $oCurrency->decimal_precision,
             $oCurrency->decimal_symbol,
@@ -227,5 +218,35 @@ class Currency
         }
 
         return $sOut;
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Infers the currency from the passed value
+     *
+     * @param Resource\Currency|string $mCurrency The currency
+     * @param string                   $sMethod   The method calling this method, for debugging
+     *
+     * @return Resource\Currency
+     * @throws CurrencyException
+     */
+    public function inferCurrency($mCurrency, string $sMethod): Resource\Currency
+    {
+        if ($mCurrency instanceof Resource\Currency) {
+            return $mCurrency;
+
+        } elseif (is_string($mCurrency)) {
+            return $this->getByIsoCode($mCurrency);
+
+        } else {
+            throw new CurrencyException(
+                sprintf(
+                    'Invalid data type (%s) passed to %s',
+                    gettype($mCurrency),
+                    $sMethod
+                )
+            );
+        }
     }
 }

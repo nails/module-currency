@@ -61,6 +61,7 @@ class Settings extends Base
         $aPermissions = parent::permissions();
 
         $aPermissions['enabled'] = 'Can change the enabled currencies';
+        $aPermissions['driver']  = 'Can update driver settings';
 
         return $aPermissions;
     }
@@ -95,12 +96,14 @@ class Settings extends Base
                 $oFormValidation = Factory::service('FormValidation');
                 $oFormValidation
                     ->buildValidator([
-                        'aEnabledCurrencies[]' => ['required'],
+                        'aEnabledCurrencies[]'    => ['required'],
+                        'enabled_driver_currency' => ['required'],
                     ])
                     ->run();
 
                 $aSettings = [
-                    'aEnabledCurrencies' => array_filter((array) $oInput->post('aEnabledCurrencies')),
+                    'aEnabledCurrencies'      => array_filter((array) $oInput->post('aEnabledCurrencies')),
+                    'enabled_driver_currency' => $oInput->post('enabled_driver_currency'),
                 ];
 
                 if (!$oAppSettingService->set($aSettings, Constants::MODULE_SLUG)) {
