@@ -116,7 +116,18 @@ class Exchange
                 if ($oFrom === $oTo) {
                     $fRate = 1;
                 } else {
-                    $fRate = $oDriver->getRate($oFrom, $oTo);
+                    try {
+                        $fRate = $oDriver->getRate($oFrom, $oTo);
+                    } catch (\Exception $e) {
+
+                        $LOG(sprintf(
+                            '<error>ERROR:</error> Exception caught whilst calculating rate %s -> %s: %s',
+                            $sFrom,
+                            $sTo,
+                            $e->getMessage()
+                        ));
+                        continue;
+                    }
                 }
 
                 $LOG(sprintf(
