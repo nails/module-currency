@@ -12,9 +12,12 @@
 namespace Nails\Currency\Service;
 
 use Nails\Common\Exception\FactoryException;
+use Nails\Common\Service\Event;
 use Nails\Currency\Constants;
+use Nails\Currency\Events;
 use Nails\Currency\Exception\CurrencyException;
 use Nails\Currency\Exception\ExchangeException\DriverNotDefinedException;
+use Nails\Currency\Exception\ExchangeException\MatrixException;
 use Nails\Currency\Factory\ExchangeMatrix;
 use Nails\Factory;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -85,11 +88,13 @@ class Exchange
     /**
      * Updates the currency matrix
      *
-     * @param OutputInterface|null $oOutput
+     * @param OutputInterface|null $oOutput An output interface to log to
      *
      * @return $this
+     * @throws CurrencyException
      * @throws DriverNotDefinedException
      * @throws FactoryException
+     * @throws MatrixException
      */
     public function updateMatrix(OutputInterface $oOutput = null): self
     {
@@ -147,6 +152,10 @@ class Exchange
 
         $LOG('Refreshing app settings');
         appSetting('currency_matrix', Constants::MODULE_SLUG, null, true);
+
+        /** @var Event $oEventService */
+        $oEventService = Factory::service('Event');
+        $oEventService->trigger(Events::EXCHANGE_MATRIX_UPDATED, Events::getEventNamespace(), [$oMatrix]);
 
         return $this;
     }
