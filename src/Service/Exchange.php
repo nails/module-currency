@@ -71,19 +71,19 @@ class Exchange
     /**
      * Exchanges a value from one currency to another
      *
-     * @param number                   $nValue        The value to exchange
+     * @param int                      $iValue        The value to exchange (in smallest unit)
      * @param Resource\Currency|string $mCurrencyFrom The currency to exchange from
      * @param Resource\Currency|string $mCurrencyTo   The currency to exchange to
      *
      * @throws CurrencyException
      */
-    public function exchange($nValue, $mCurrencyFrom, $mCurrencyTo)
+    public function exchange($iValue, $mCurrencyFrom, $mCurrencyTo, bool $bRound = true)
     {
         $oCurrencyFrom = $this->oCurrency->inferCurrency($mCurrencyFrom, __METHOD__);
         $oCurrencyTo   = $this->oCurrency->inferCurrency($mCurrencyTo, __METHOD__);
         $fRate         = $this->getRate($oCurrencyFrom, $oCurrencyTo);
 
-        dd($nValue, $oCurrencyFrom, $oCurrencyTo, $fRate);
+        return $bRound ? round($iValue * $fRate) : $iValue * $fRate;
     }
 
     // --------------------------------------------------------------------------
@@ -101,6 +101,8 @@ class Exchange
     {
         $oCurrencyFrom = $this->oCurrency->inferCurrency($mCurrencyFrom, __METHOD__);
         $oCurrencyTo   = $this->oCurrency->inferCurrency($mCurrencyTo, __METHOD__);
+
+        return $this->oMatrix->getRate($oCurrencyFrom, $oCurrencyTo);
     }
 
     // --------------------------------------------------------------------------

@@ -81,6 +81,43 @@ class ExchangeMatrix implements \JsonSerializable
      */
     public function setRate(Currency $oFrom, Currency $oTo, float $fRate): self
     {
+        $this->testCurrencyPairExisitInMatrix($oFrom, $oTo);
+
+        $this->oMatrix->{$oFrom->code}->{$oTo->code} = $fRate;
+
+        return $this;
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Returns the exchange rate between two currencies
+     *
+     * @param Currency $oFrom The currency to exchange from
+     * @param Currency $oTo   The currency to exchange to
+     *
+     * @return float
+     * @throws MatrixException
+     */
+    public function getRate(Currency $oFrom, Currency $oTo): float
+    {
+        $this->testCurrencyPairExisitInMatrix($oFrom, $oTo);
+
+        return $this->oMatrix->{$oFrom->code}->{$oTo->code};
+    }
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Tests a currency pair exists in the matrix
+     *
+     * @param Currency $oFrom The currency to exchange from
+     * @param Currency $oTo   The currency to exchange to
+     *
+     * @throws MatrixException
+     */
+    protected function testCurrencyPairExisitInMatrix(Currency $oFrom, Currency $oTo): void
+    {
         if (!property_exists($this->oMatrix, $oFrom->code)) {
             throw new MatrixException(
                 sprintf(
@@ -97,9 +134,5 @@ class ExchangeMatrix implements \JsonSerializable
                 )
             );
         }
-
-        $this->oMatrix->{$oFrom->code}->{$oTo->code} = $fRate;
-
-        return $this;
     }
 }
