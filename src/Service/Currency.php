@@ -44,9 +44,9 @@ class Currency
     /**
      * All currencies supported by this system
      *
-     * @var Resource\Currency[]
+     * @var Resource\Currency[]|null
      */
-    protected $aEnabledCurrencies = [];
+    protected $aEnabledCurrencies;
 
     // --------------------------------------------------------------------------
 
@@ -62,11 +62,6 @@ class Currency
         foreach ($aSupported as $oCurrency) {
             $this->aSupportedCurrencies[$oCurrency->code]     = new Resource\Currency($oCurrency);
             $this->aSupportedCurrenciesFlat[$oCurrency->code] = $oCurrency->code . ' (' . $oCurrency->label . ')';
-        }
-
-        $aEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG, []);
-        foreach ($aEnabled as $sCode) {
-            $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
         }
     }
 
@@ -117,6 +112,16 @@ class Currency
      */
     public function getAllEnabled(): array
     {
+        if (is_null($this->aEnabledCurrencies)) {
+
+            $aEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG, []);
+
+            $this->aEnabledCurrencies = [];
+            foreach ($aEnabled as $sCode) {
+                $this->aEnabledCurrencies[$sCode] = $this->getByIsoCode($sCode);
+            }
+        }
+
         return $this->aEnabledCurrencies;
     }
 
@@ -175,9 +180,9 @@ class Currency
     public function isEnabled($mCurrency): bool
     {
         if ($mCurrency instanceof Resource\Currency) {
-            return array_key_exists($mCurrency->code, $this->aEnabledCurrencies);
+            return array_key_exists($mCurrency->code, $this->getAllEnabled());
         } elseif (is_string($mCurrency)) {
-            return array_key_exists($mCurrency, $this->aEnabledCurrencies);
+            return array_key_exists($mCurrency, $this->getAllEnabled());
         }
 
         throw new CurrencyException(
