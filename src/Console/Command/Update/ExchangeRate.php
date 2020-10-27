@@ -4,6 +4,7 @@ namespace Nails\Currency\Console\Command\Update;
 
 use Nails\Console\Command\Base;
 use Nails\Currency\Constants;
+use Nails\Currency\Exception\ExchangeException\DriverNotDefinedException;
 use Nails\Currency\Service\Exchange;
 use Nails\Factory;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,7 +43,19 @@ class ExchangeRate extends Base
 
             /** @var Exchange $oExchangeService */
             $oExchangeService = Factory::service('Exchange', Constants::MODULE_SLUG);
-            $oExchangeService->updateMatrix($oOutput);
+
+            try {
+                $oExchangeService->updateMatrix($oOutput);
+            } catch (DriverNotDefinedException $e) {
+                /**
+                 * Output a warning rather than allow the exception to bubble as
+                 * the app might not actually need exchange functionality and we
+                 * don't want this to be overly verbose... but we do want someone
+                 * is debugging why exchange rates aren't being updated to be
+                 * able to see why its not being updated easily.
+                 */
+                $oOutput->writeln('<error>Currency driver has not been defined</error>');
+            }
 
             $oOutput->writeln('<comment>Currency matrix updated</comment>');
             return static::EXIT_CODE_SUCCESS;
