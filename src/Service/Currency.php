@@ -15,6 +15,7 @@ use Nails\Common\Exception\FactoryException;
 use Nails\Currency\Constants;
 use Nails\Currency\Exception\CurrencyException;
 use Nails\Currency\Resource;
+use Nails\Currency\Settings;
 
 /**
  * Class Currency
@@ -114,7 +115,7 @@ class Currency
     {
         if (is_null($this->aEnabledCurrencies)) {
 
-            $aEnabled = appSetting('aEnabledCurrencies', Constants::MODULE_SLUG, []);
+            $aEnabled = appSetting(Settings\General::KEY_ENABLED_CURRENCIES, Constants::MODULE_SLUG, []);
 
             $this->aEnabledCurrencies = [];
             foreach ($aEnabled as $sCode) {

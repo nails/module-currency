@@ -33,16 +33,7 @@
         "nails": {
             "moduleName": "currency",
             "type": "module",
-            "namespace": "Nails\\Currency\\",
-            "data": {
-                "settings": [
-                    {
-                        "key": "aEnabledCurrencies",
-                        "label": "Enabled Currencies",
-                        "info": "Which currencies should be enabled for use"
-                    }
-                ]
-            }
+            "namespace": "Nails\\Currency\\"
         }
     },
     "autoload": {

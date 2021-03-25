@@ -19,6 +19,7 @@ use Nails\Currency\Exception\CurrencyException;
 use Nails\Currency\Exception\ExchangeException\DriverNotDefinedException;
 use Nails\Currency\Exception\ExchangeException\MatrixException;
 use Nails\Currency\Factory\ExchangeMatrix;
+use Nails\Currency\Settings;
 use Nails\Factory;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,10 +31,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Exchange
 {
     /** @var string */
-    const SETTING_MATRIX = 'currency_matrix';
+    const SETTING_MATRIX = Settings\General::KEY_MATRIX;
 
     /** @var string */
-    const SETTING_MATRIX_UPDATED = 'currency_matrix_updated';
+    const SETTING_MATRIX_UPDATED = Settings\General::KEY_MATRIX_UPDATED;
 
     // --------------------------------------------------------------------------
 
