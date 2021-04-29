@@ -23,5 +23,5 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install
 
-            -   name: Build
-                run: composer build
+            -   name: Run tests
+                run: composer test
