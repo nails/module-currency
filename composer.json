@@ -34,6 +34,10 @@
         "test": "./vendor/bin/phpunit",
         "analyse": "./vendor/bin/phpstan analyse -c .phpstan/config.neon"
     },
+    "suggest": {
+        "nails/driver-currency-currencylayer": "Adds support for CurrencyLayer as an exchange rate source.",
+        "nails/driver-currency-open-exchange-rates": "Adds support for Open Exchange Rates as an exchange rate source."
+    },
     "extra": {
         "nails": {
             "moduleName": "currency",
