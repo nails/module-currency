@@ -3,6 +3,8 @@
 namespace Nails\Currency\Resource;
 
 use Nails\Common\Resource;
+use Nails\Currency\Constants;
+use Nails\Factory;
 
 /**
  * Class Currency
@@ -59,4 +61,21 @@ class Currency extends Resource
      * @var string
      */
     public $thousands_separator;
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Formats an integer as this currency
+     *
+     * @param int  $iValue                The value to format
+     * @param bool $bIncludeSymbolInclude the currency symbol
+     *
+     * @return string
+     */
+    public function format(int $iValue, bool $bIncludeSymbol = true): string
+    {
+        /** @var \Nails\Currency\Service\Currency $oCurrency */
+        $oCurrency = Factory::service('Currency', Constants::MODULE_SLUG);
+        return $oCurrency->format($this, $iValue / pow(10, $this->decimal_precision), $bIncludeSymbol);
+    }
 }
