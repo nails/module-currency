@@ -76,7 +76,7 @@ class Currency
     public function getSupported(): array
     {
         return (array) json_decode(
-            file_get_contents(NAILS_PATH . 'module-currency/resources/currencies.json')
+            (string) file_get_contents(NAILS_PATH . 'module-currency/resources/currencies.json')
         );
     }
 
@@ -209,7 +209,7 @@ class Currency
 
         $oCurrency = $this->inferCurrency($mCurrency, __METHOD__);
         $sOut      = number_format(
-            $nValue,
+            (int) $nValue,
             $oCurrency->decimal_precision,
             $oCurrency->decimal_symbol,
             $oCurrency->thousands_separator
