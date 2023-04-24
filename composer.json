@@ -23,6 +23,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+        "php": ">=8.1",
         "nails/module-console": "dev-develop",
         "nails/module-cron": "dev-develop"
     },

@@ -62,7 +62,7 @@ class ExchangeMatrix implements \JsonSerializable
      *
      * @return \stdClass
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getMatrix();
     }
