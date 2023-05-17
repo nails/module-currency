@@ -209,7 +209,7 @@ class Currency
 
         $oCurrency = $this->inferCurrency($mCurrency, __METHOD__);
         $sOut      = number_format(
-            (int) $nValue,
+            $nValue,
             $oCurrency->decimal_precision,
             $oCurrency->decimal_symbol,
             $oCurrency->thousands_separator
