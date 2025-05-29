@@ -26,7 +26,7 @@ class ExchangeMatrix implements \JsonSerializable
      * @param array          $aCurrencies The curencies for the matrix
      * @param \stdClass|null $oMatrix     A preconfigured matrix
      */
-    public function __construct(array $aCurrencies = [], \stdClass $oMatrix = null)
+    public function __construct(array $aCurrencies = [], ?\stdClass $oMatrix = null)
     {
         $this->aCurrencies = $aCurrencies;
 

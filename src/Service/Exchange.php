@@ -55,8 +55,8 @@ class Exchange
      * @throws FactoryException
      */
     public function __construct(
-        Currency $oCurrencyService = null,
-        ExchangeMatrix $oExchangeMatrix = null
+        ?Currency $oCurrencyService = null,
+        ?ExchangeMatrix $oExchangeMatrix = null
     ) {
         $this->oCurrency = $oCurrencyService ?? Factory::service('Currency', Constants::MODULE_SLUG);
         $this->oMatrix   = $oExchangeMatrix ?? Factory::factory(
@@ -119,7 +119,7 @@ class Exchange
      * @throws FactoryException
      * @throws MatrixException
      */
-    public function updateMatrix(OutputInterface $oOutput = null): self
+    public function updateMatrix(?OutputInterface $oOutput = null): self
     {
         $LOG = function (string $sMessage) use ($oOutput) {
             if ($oOutput) {
