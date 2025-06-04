@@ -13,8 +13,8 @@ return [
             }
         },
         'Exchange'       => function (
-            Service\Currency $oCurrencyService = null,
-            Factory\ExchangeMatrix $oMatrix = null
+            ?Service\Currency $oCurrencyService = null,
+            ?Factory\ExchangeMatrix $oMatrix = null
         ): Service\Exchange {
             if (class_exists('\App\Currency\Service\Exchange')) {
                 return new \App\Currency\Service\Exchange($oCurrencyService, $oMatrix);
@@ -31,7 +31,7 @@ return [
         },
     ],
     'factories' => [
-        'ExchangeMatrix' => function (array $aCurrencies, \stdClass $oMatrix = null) {
+        'ExchangeMatrix' => function (array $aCurrencies, ?\stdClass $oMatrix = null) {
             if (class_exists('\App\Currency\Factory\ExchangeMatrix')) {
                 return new \App\Currency\Factory\ExchangeMatrix($aCurrencies, $oMatrix);
             } else {
