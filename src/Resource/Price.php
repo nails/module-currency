@@ -29,14 +29,12 @@ class Price extends Resource
     /**
      * Price constructor.
      *
-     * @param array $mObj
-     *
      * @throws FactoryException
      * @throws CurrencyException
      */
-    public function __construct($mObj = [])
+    public function __construct(self|\stdClass|array $resource = [])
     {
-        parent::__construct($mObj);
+        parent::__construct($resource);
 
         /** @var \Nails\Currency\Service\Currency $oCurrency */
         $oCurrency = Factory::service('Currency', Constants::MODULE_SLUG);
